@@ -2,31 +2,30 @@
 using Microsoft.AspNetCore.Mvc;
 using PollyCircuitBreaker.Services;
 
-namespace PollyCircuitBreaker.Controllers
+namespace PollyCircuitBreaker.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProductController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductController : ControllerBase
+    internal readonly IProductService _productService;
+
+    public ProductController(IProductService productService)
     {
-        internal readonly IProductService _productService;
+        _productService = productService;
+    }
 
-        public ProductController(IProductService productService)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProductById(int id, CancellationToken cs)
+    {
+        try
         {
-            _productService = productService;
+            var result = await _productService.GetProductByIdAsync(id, cs);
+            return Ok(result);
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductById(int id, CancellationToken cs)
+        catch (Exception ex)
         {
-            try
-            {
-                var result = await _productService.GetProductByIdAsync(id, cs);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, ex.Message);
         }
     }
 }
