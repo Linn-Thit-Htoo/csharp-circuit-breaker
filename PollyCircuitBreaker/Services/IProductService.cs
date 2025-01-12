@@ -1,9 +1,8 @@
 ﻿using PollyCircuitBreaker.Models;
 
-namespace PollyCircuitBreaker.Services
+namespace PollyCircuitBreaker.Services;
+
+public interface IProductService
 {
-    public interface IProductService
-    {
-        Task<ProductModel> GetProductByIdAsync(int id, CancellationToken cs = default);
-    }
+    Task<ProductModel> GetProductByIdAsync(int id, CancellationToken cs = default);
 }
