@@ -19,7 +19,9 @@ public class ProductService : IProductService
     {
         try
         {
-            HttpResponseMessage response = await _policy.ExecuteAsync(() => _httpClient.GetAsync($"/products/{id}", cs));
+            HttpResponseMessage response = await _policy.ExecuteAsync(
+                () => _httpClient.GetAsync($"/products/{id}", cs)
+            );
             response.EnsureSuccessStatusCode();
             string jsonStr = await response.Content.ReadAsStringAsync(cs);
 
