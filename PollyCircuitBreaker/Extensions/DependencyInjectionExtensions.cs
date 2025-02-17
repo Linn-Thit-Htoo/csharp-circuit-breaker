@@ -23,7 +23,7 @@ public static class DependencyInjectionExtensions
             .Handle<HttpRequestException>()
             .CircuitBreakerAsync(
                 exceptionsAllowedBeforeBreaking: 2,
-                durationOfBreak: TimeSpan.FromSeconds(10),
+                durationOfBreak: TimeSpan.FromMinutes(1),
                 onBreak: (exception, timespan) =>
                 {
                     logger.LogError($"Circuit broken due to: {exception.Message}");
