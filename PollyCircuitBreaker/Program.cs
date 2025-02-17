@@ -6,7 +6,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDependencies(builder);
+ILogger logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<Program>();
+builder.Services.AddDependencies(builder, logger);
 
 var app = builder.Build();
 

@@ -7,7 +7,8 @@ public static class DependencyInjectionExtensions
 {
     public static IServiceCollection AddDependencies(
         this IServiceCollection services,
-        WebApplicationBuilder builder
+        WebApplicationBuilder builder,
+        ILogger logger
     )
     {
         builder.Services.AddHttpClient(
@@ -22,13 +23,13 @@ public static class DependencyInjectionExtensions
             .Handle<HttpRequestException>()
             .CircuitBreakerAsync(
                 exceptionsAllowedBeforeBreaking: 2,
-                durationOfBreak: TimeSpan.FromMinutes(1),
+                durationOfBreak: TimeSpan.FromSeconds(10),
                 onBreak: (exception, timespan) =>
                 {
-                    Console.WriteLine($"Circuit broken due to: {exception.Message}");
+                    logger.LogError($"Circuit broken due to: {exception.Message}");
                 },
-                onReset: () => Console.WriteLine("Circuit closed."),
-                onHalfOpen: () => Console.WriteLine("Circuit in half-open state.")
+                onReset: () => logger.LogError("Circuit closed."),
+                onHalfOpen: () => logger.LogError("Circuit in half-open state.")
             );
 
         builder.Services.AddSingleton<IAsyncPolicy>(circuitBreakerPolicy);
