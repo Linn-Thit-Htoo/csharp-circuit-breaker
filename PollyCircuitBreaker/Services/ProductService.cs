@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.Net.Http;
+using Newtonsoft.Json;
 using Polly;
 using PollyCircuitBreaker.Models;
-using System.Net.Http;
 
 namespace PollyCircuitBreaker.Services;
 
